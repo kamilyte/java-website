@@ -1,0 +1,25 @@
+artists
+id;followers;genres;name;popularity
+STRING;INTEGER;STRING;STRING;INTEGER
+PRIMARY KEY UNIQUE;NOT NULL;NOT NULL;NOT NULL;NOT NULL
+7dc9jcxR0GgRMoNasStnmZ;5160.0;['christian relaxative'];David Baroni;48
+4l7F7EEXy93Jr0uIITY7bN;53173.0;['islamic recitation', 'quran'];Mishari Rashed Alafasy;58
+1Cs0zKBU1kc0i8ypK3B9ai;22429621.0;['big room', 'dance pop', 'edm', 'pop', 'pop dance'];David Guetta;90
+6BrvowZBreEkXzJQMpL174;3411261.0;['big room', 'dance pop', 'dutch house', 'edm', 'electro house' 'pop dance', 'progressive electro house', 'progressive house', 'tropical house'];Hardwell;71
+4nDoRrQiYLoBzwC5BhVJzF;21080479.0;['dance pop', 'electropop', 'pop', 'post-teen pop'];Camila Cabello;85
+5vBSrE1xujD2FXYRarbAXc;1616179.0;['dance pop', 'electropop', 'gauze pop', 'pop', 'post-teen pop', 'tropical house'];Years & Years;73
+37M5pPGs6V1fchFJSgCguX;1168213.0;['alt z', 'electropop', 'indie pop', 'la indie', 'pop', 'post-teen pop'];FINNEAS;77
+1uNFoZAHBGtllmzznpCI3s;44606973.0;['canadian pop', 'pop', 'post-teen pop'];Justin Bieber;100
+5jTdjuYoUW8xAHPKryK5hl;155.0;[];New Year's Party 2016;1
+1Xyo4u8uXC1ZmMpatF05PJ;31308207.0;['canadian contemporary r&b', 'canadian pop', 'pop'];The Weeknd;96
+3Nrfpe0tUJi4K4DXYWgMUX;31623813.0;['k-pop', 'k-pop boy group'];BTS;96
+66CXWjxzNUsdJxJ2JdwvnR;61301006.0;['pop', 'post-teen pop'];Ariana Grande;95
+1vyhD5VmyZ7KMfW5gqLgo5;27286822.0;['latin', 'reggaeton', 'reggaeton colombiano', 'trap latino'];J Balvin;95
+6M2wZ9GZgrQXHCFfjv46we;24123468.0;['dance pop', 'pop', 'uk pop'];Dua Lipa;95
+7dGJo4pcD2V6oG8kP0tJRR;43747833.0;['detroit hip hop', 'hip hop', 'rap'];Eminem;94
+1mcTU81TzQhprhouKaTkpq;4438013.0;['puerto rican pop', 'trap latino'];Rauw Alejandro;93
+0du5cEVh5yTK9QJze8zA0C;29899101.0;['dance pop', 'pop', 'post-teen pop'];Bruno Mars;93
+6LuN9FCkKOj5PcnpouEgny;13728298.0;['alternative r&b', 'pop'];Khalid;92
+329e4yvIujISKGKz1BZZbO;9805704.0;['latin', 'latin hip hop', 'reggaeton', 'trap latino', 'tropical'];Farruko;91
+1r4hJ1h58CWwUQe3MxPuau;25073031.0;['latin', 'reggaeton', 'reggaeton colombiano'];Maluma;91
+04gDigrS5kc9YWfZHwBETP;30291109.0;['pop', 'pop rock'];Maroon 5;91

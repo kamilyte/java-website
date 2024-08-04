@@ -1,0 +1,544 @@
+openapi: 3.0.3
+info:
+  title: Songs Database API
+  description: Songs Database API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3001'
+    description: Future backend implementation
+components:
+  schemas:
+    Song:
+      type: object
+      required:
+        - "title"
+        - "id"
+      properties:
+        title:
+          type: string
+          example: Eye in the sky
+        id:
+          type: string
+          readOnly: true
+          example: 1
+        popularity:
+          type: integer
+          example: 30
+        duration_ms:
+          type: integer
+          example: 63500
+        explicit:
+          type: boolean
+          example: false
+        artists: 
+          type: string
+        id_artists:
+          type: string
+        release_date:
+          type: string
+
+    Artist:
+      type: object
+      required:
+        - "name"
+        - "id"
+      properties:
+        id:
+          type: string
+          example: 2
+          readOnly: true
+        followers:
+          type: integer
+          example: 990000
+        genres:
+          type: string
+        name:
+          type: string
+          example: The Allan Parson Project
+        popularity:
+          type: integer
+          example: 30
+        
+    ArtistSummary:
+      type: object
+      required:
+        - "name"
+        - "id"
+      properties:
+        id:
+          type: integer
+          example: 2
+          readOnly: true
+        name:
+          type: string
+          example: The Allan Parson Project
+        numberOfsongs:
+          type: integer
+        earliestRelease: 
+          $ref: "#/components/schemas/Song"
+        latestRelease: 
+          $ref: "#/components/schemas/Song"
+        highestPopularity: 
+          type: integer
+
+
+    SongFilterKeys:
+      type: string
+      default: popularity
+      enum:
+        - title
+        - id_artists
+        - popularity
+        - release_date
+
+  responses:
+    NoResults:
+      description: List empty; no results
+
+    NotFound:
+      description: Resource not found
+
+    BadRequest:
+      description: Request was not well-formed, see error details
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error-message:
+                type: string
+                description: Error message detailing the problem with the request
+
+    ServerError:
+      description: Server error; no results, try again later
+
+  parameters:
+    order-by:
+      name: order-by
+      in: query
+      required: false
+      schema:
+        $ref: "#/components/schemas/SongFilterKeys"
+
+    order-dir:
+      name: order-dir
+      in: query
+      required: false
+      description: The directorion to order the indicated column
+      schema:
+        type: string
+        default: desc
+        enum:
+          - asc
+          - desc
+
+    limit:
+      name: limit
+      in: query
+      required: true
+      description: Limit the number of returned items
+      schema:
+        type: integer
+        default: 50
+        maximum: 100
+
+
+    song-filter-title:
+      name: title
+      in: query
+      required: false
+      description: Filtering songs by title
+      schema:
+        type: string
+
+    song-filter-year:
+      name: year
+      in: query
+      required: false
+      description: Filtering songs by year
+      schema:
+        type: string
+
+    artist-id:
+      name: id
+      in: path
+      required: true
+      description: The ID of the artist
+      schema:
+        type: string
+
+    artist-filter-name:
+      name: name
+      in: path
+      required: true
+      description: The name of the artist
+      schema:
+        type: string
+
+paths:
+  /songs:
+    get:
+      tags:
+        - Songs
+      description: Retrieves a list of possibly filtered songs
+      summary: List of (selected) songs
+      parameters:
+        - $ref: "#/components/parameters/order-by"
+        - $ref: "#/components/parameters/order-dir"
+        - $ref: '#/components/parameters/limit'
+        - $ref: "#/components/parameters/song-filter-title"
+        - $ref: "#/components/parameters/song-filter-year"
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Song"
+            application/csv:
+              schema:
+                type: string
+                items:
+                  $ref: "#/components/schemas/Song"
+        '204':
+          $ref: "#/components/responses/NoResults"
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+    post:
+      tags:
+        - Songs
+      summary: Create a new song
+      description: Creates a new song with the given information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Song"
+          application/csv:
+            schema:
+              $ref: "#/components/schemas/Song"
+      responses:
+        '201':
+          description: Song successfully added
+          content:
+            application/json:
+              schema:
+                type: integer
+                description: ID of newly added song
+          headers:
+            Location:
+              schema:
+                type: string
+              description: The URL of the newly-created song
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '409':
+          description: Song with the same name and artist already exists
+          headers:
+            Location:
+              schema:
+                type: string
+              description: The URL of the pre-existing song
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+  /songs/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: The ID of the song
+        schema:
+          type: string
+
+    get:
+      tags:
+        - Songs
+      summary: Retrieve a selected song
+      description: Retrieves the song with the given id
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Song"
+            application/csv:
+              schema:
+                type: string
+                items:
+                  $ref: "#/components/schemas/Song"
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '404':
+          $ref:  "#/components/responses/NotFound"
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+    post:
+      tags:
+        - Songs
+      summary: Update a song
+      description: Updates the song with the given id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Song"
+          application/csv:
+            schema:
+              $ref: "#/components/schemas/Song"
+      responses:
+        '200':
+          description: "Song updated, returns the new state"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Song"
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      tags:
+        - Songs
+      summary: Delete a song
+      description: Deletes the song with the given id
+      responses:
+        '204':
+          description: Song deleted successfully
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+  /artists:
+    
+    get:
+      tags:
+        - Artists
+      summary: Retrieve a list of artists
+      description: Retrieves a list of all artists
+      parameters:
+        - $ref: '#/components/parameters/limit'
+        - name: artistsName
+          in: query
+          description: The name of the Artist
+          schema:
+            type: string
+        - name: id
+          in: query
+          description: id of an artist 
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArtistSummary"
+            application/csv:
+              schema:
+                type: string
+                items:
+                  $ref: "#/components/schemas/ArtistSummary"
+        '204':
+          $ref: "#/components/responses/NoResults"
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+
+    post:
+      tags:
+        - Artists
+      summary: Create a new artist
+      description: Creates a new artist with the given information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Artist"
+          application/csv:
+            schema:
+              $ref: "#/components/schemas/Artist"
+      responses:
+        '201':
+          description: Artist successfully added
+          content:
+            application/json:
+              schema:
+                type: integer
+                description: ID of newly added artist
+          headers:
+            Location:
+              schema:
+                type: string
+              description: The URL of the newly-created artist
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '409':
+          description: Artist with the same name and songs already exists
+          headers:
+            Location:
+              schema:
+                type: string
+              description: The URL of the pre-existing artist
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+  /artists/{id}:
+    parameters:
+      - $ref: "#/components/parameters/artist-id"
+
+    get:
+      tags:
+        - Artists
+      summary: Retrieve a selected artist
+      description: Retrieves the artist with the given id
+      
+            
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArtistSummary"
+            application/csv:
+              schema:
+                type: string
+                items:
+                  $ref: "#/components/schemas/ArtistSummary"
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '404':
+          $ref:  "#/components/responses/NotFound"
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+    post:
+      tags:
+        - Artists
+      summary: Update an artist
+      description: Updates the artist with the given id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Artist"
+          application/csv:
+            schema:
+              $ref: "#/components/schemas/Artist"
+      responses:
+        '200':
+          description: "Artist updated, returns the new state"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Artist"
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      tags:
+        - Artists
+      summary: Delete an artist
+      description: Deletes the artist with the given id
+      responses:
+        '204':
+          description: Artist deleted successfully
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '404':
+          $ref: "#/components/responses/NotFound"
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+  /artists/{id}/songs:
+    parameters:
+      - $ref: "#/components/parameters/artist-id"
+
+    get:
+      tags:
+        - Artists
+      summary: Retrieve a list of songs performed by a selected artist
+      description: Retrieves all songs performed by the artist with the given id, possibly filtered by the requested criteria
+      parameters:
+        - $ref: "#/components/parameters/order-by"
+        - $ref: "#/components/parameters/order-dir"
+
+      responses:
+        '200':
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ArtistSummary"
+            application/csv:
+              schema:
+                type: string
+                items:
+                  $ref: "#/components/schemas/ArtistSummary"
+        '204':
+          $ref: "#/components/responses/NoResults"
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+        '404':
+          $ref:  "#/components/responses/NotFound"
+
+        '5XX':
+          $ref: '#/components/responses/ServerError'

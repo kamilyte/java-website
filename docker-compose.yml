@@ -1,0 +1,10 @@
+version: "1.0.0"
+services:
+  backend:
+    image: "arasaniu/webapp:backendmulti"
+    ports:
+      - "8081:8081"
+  frontend:
+    image: "arasaniu/webapp:frontendmulti"
+    ports:
+      - "3000:3000"

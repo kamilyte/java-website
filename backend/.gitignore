@@ -1,0 +1,7 @@
+.idea
+.swagger-codegen
+target
+identifier.sqlite
+webapp.iml
+.swagger-codegen-ignore
+.DS_Store

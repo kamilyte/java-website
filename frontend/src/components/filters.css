@@ -1,0 +1,53 @@
+.custom-select {
+    position: relative;
+    font-family: Arial;
+}
+
+.custom-select select {
+display: none; /*hide original SELECT element: */
+}
+
+.select-selected {
+background-color: DodgerBlue;
+}
+
+select
+{
+    width: 50% ;
+    height:150;
+    font-size:1.1rem;
+}
+
+input {
+    height:150;
+    font-size:1.1rem;
+}
+.filters1 {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    width: 20% ;
+    transform: translate(-50%, -50%);
+
+}
+.filters{
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50% ;
+}
+
+button{
+        text-decoration: none;
+        background-color: rgb(0, 120, 72) ;
+        padding: 0.4rem 0.4rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: rgb(255, 255, 255);
+        margin-left: 2px;
+        margin-top: 6px;
+}
+

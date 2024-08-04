@@ -1,0 +1,17 @@
+
+*{
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box;
+}
+
+.App {
+  text-align: center;
+  margin: 10 20;
+}
+
+.map-container {
+  margin: 20px auto;
+  width: 80%;
+  height: 80vh;
+}
